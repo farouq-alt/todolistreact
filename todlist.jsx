@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Todo() {
   const [tasks, setTasks] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editIndex, seteditindex] = useState(null);
   const taskRef = useRef();
 
   const handleSubmit = () => {
@@ -14,7 +14,7 @@ export default function Todo() {
       const updated = [...tasks];
       updated[editIndex].text = value;
       setTasks(updated);
-      setEditIndex(null);
+      seteditindex(null);
     } else {
       setTasks([...tasks, {text:value, done:false}]);
     }
@@ -28,7 +28,7 @@ export default function Todo() {
 
   const handleEdit = (index) => {
     taskRef.current.value = tasks[index].text;
-    setEditIndex(index);
+    seteditindex(index);
   };
 
   const toggleDone = (index) => {
