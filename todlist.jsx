@@ -1,23 +1,25 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Todo() {
   const [tasks, setTasks] = useState([]);
-  const [task, setTask] = useState("");
   const [editIndex, setEditIndex] = useState(null);
+  const taskRef = useRef();
 
   const handleSubmit = () => {
-    if (task.trim() === "") return;
+    const value = taskRef.current.value.trim();
+    if (value === "") return;
 
     if (editIndex !== null) {
-      const updatedTasks = [...tasks];
-      updatedTasks[editIndex].text = task;
-      setTasks(updatedTasks);
+      const updated = [...tasks];
+      updated[editIndex].text = value;
+      setTasks(updated);
       setEditIndex(null);
     } else {
-      setTasks([...tasks, { text: task, done: false }]);
+      setTasks([...tasks, {text:value, done:false}]);
     }
-    setTask("");
+
+    taskRef.current.value = ""; 
   };
 
   const handleDelete = (index) => {
@@ -25,7 +27,7 @@ export default function Todo() {
   };
 
   const handleEdit = (index) => {
-    setTask(tasks[index].text);
+    taskRef.current.value = tasks[index].text;
     setEditIndex(index);
   };
 
@@ -43,10 +45,9 @@ export default function Todo() {
         <div className="input-group mb-3">
           <input
             type="text"
+            ref={taskRef}
             className="form-control"
             placeholder="Ajouter une tâche..."
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
           />
           <button className="btn btn-success" onClick={handleSubmit}>
             {editIndex !== null ? "Modifier" : "Ajouter"}
